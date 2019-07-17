@@ -1,6 +1,7 @@
 {
   "name": "Express demo application (development)",
   "htmlContants": {
-    "welcomeHtml": "Express development server"
+    "welcomeHtml": "Express development server",
+    "pong": "Pong dev"
   }
 }
