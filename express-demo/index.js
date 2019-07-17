@@ -4,17 +4,17 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const config = require("config");
 //[Environment]::SetEnvironmentVariable("DEBUG","app:startup")
-const startupDebuger = require("debug")("app:startup");
+const startupDebugger = require("debug")("app:startup");
 //routes
 const coursesRoutes = require("./routes/courses");
 const homeRoutes = require("./routes/home");
 const genresRoutes = require("./routes/genres");
 
 const app = express();
-//use templating engine
+//use template engine
 app.set("view engine", "pug");
 app.set("views", "./views");
-//middleware for imput mapping
+//middleware for input mapping
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -24,15 +24,15 @@ app.use(headerMiddleware);
 app.use(helmet());
 //HTTP requests logger
 if (app.get("env") === "development") {
-  startupDebuger("Morgan logging is enabled");
+  startupDebugger("Morgan logging is enabled");
   app.use(morgan("tiny"));
 }
 //register routes
 app.use("/api/courses", coursesRoutes);
 app.use("/api/genres", genresRoutes);
 app.use("/", homeRoutes);
-//Strt application
+//Start application
 const port = process.env.PORT || 4546;
 app.listen(port, () => {
-  startupDebuger(`${config.get("name")} lisenning on port :${port} ....`);
+  startupDebugger(`${config.get("name")} lisenning on port :${port} ....`);
 });
