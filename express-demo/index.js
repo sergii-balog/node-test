@@ -1,5 +1,11 @@
 const Joi = require("joi");
+const headerMiddleware = require("./headerMiddleware");
 const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const config = require("config");
+//[Environment]::SetEnvironmentVariable("DEBUG","app:startup")
+const startupDebuger = require("debug")("app:startup");
 
 const app = express();
 
@@ -9,10 +15,32 @@ const courses = [
   { id: 3, name: "Mongo and mango", author: "Akapulko Jister" }
 ];
 
+//use templating engine
+app.set("view engine", "pug");
+app.set("views", "./views");
+
+//middleware for imput mapping
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+// custom own middleware
+app.use(headerMiddleware);
+
+//HTTP headers
+app.use(helmet());
+if (app.get("env") === "development") {
+  startupDebuger("Morgan logging is enabled");
+  //HTTP requests logger
+  app.use(morgan("tiny"));
+}
 
 app.get("/", (request, response) => {
-  response.send("<h3>Express server</h3>");
+  //response.send(config.get("htmlContants.welcomeHtml"));
+  response.render("index", {
+    title: config.get("htmlContants.welcomeHtml"),
+    message: config.get("htmlContants.welcomeHtml")
+  });
 });
 
 app.get("/api/courses", (request, response) => {
@@ -80,5 +108,5 @@ function validateCourse(course) {
 const port = process.env.PORT || 4546;
 
 app.listen(port, () => {
-  console.log(`Express lisenning on port ${port} ....`);
+  startupDebuger(`${config.get("name")} lisenning on port :${port} ....`);
 });

@@ -1,0 +1,6 @@
+{
+  "name": "Express demo application",
+  "htmlContants": {
+    "welcomeHtml": "Express server"
+  }
+}
