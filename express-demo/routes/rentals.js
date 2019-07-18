@@ -44,10 +44,9 @@ router.post("/", async (request, response) => {
     },
     Date.now(),
     null,
-    price
+    price,
+    movie
   );
-  movie.numberInStock--;
-  movie.save();
   response.send(JSON.stringify(result, null, " "));
 });
 

@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const modelRentals = require("../models/rental");
+const Fawn = require("fawn");
 
 const Rental = mongoose.model("Rental", modelRentals.schema);
+Fawn.init(mongoose);
 
 module.exports.getAllRentals = async function getAllRentals() {
   const rentals = await Rental.find().sort({ dateOut: -1 });
@@ -42,15 +44,20 @@ module.exports.createRental = async function createRental(
   dateReturned,
   rentalFee
 ) {
-  console.log("Rental", rentalFee);
   const rental = new Rental({
     client: client,
     movie: movie,
     dateOut: dateOut,
     dateReturned: dateReturned,
-    rentalFee: rentalFee
+    rentalFee: rentalFee,
+    movie
   });
-  return await rental.save();
+  //return await rental.save();
+  new Fawn.Task()
+    .save("rentals", rental)
+    .update("movies", { _id: movie._id }, { $inc: { numberInStock: -1 } })
+    .run();
+  return rental;
 };
 
 module.exports.removeRental = async function removeRental(id) {
