@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
+const modelGenre = require("../models/genre");
 
-const schema = new mongoose.Schema({
-  name: { type: String, required: true, maxlength: 255, minlength: 5 }
-});
-
-const Genre = mongoose.model("Genre", schema);
+const Genre = mongoose.model("Genre", modelGenre.schema);
 
 module.exports.getAllGenres = async function getAllGenres() {
   const genres = await Genre.find();

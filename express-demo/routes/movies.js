@@ -3,6 +3,7 @@ const Joi = require("joi");
 const router = express.Router();
 const dbMovies = require("../db/movies");
 const dbGenres = require("../db/genres");
+const modelMovie = require("../models/genre");
 
 router.get("/", async (request, response) => {
   console.log("inside");
@@ -18,7 +19,7 @@ router.get("/:id", async (request, response) => {
 });
 
 router.post("/", async (request, response) => {
-  const { error } = validateMovie(request.body);
+  const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
   const genre = await dbGenres.getGenre(request.body.genreId);
@@ -37,7 +38,7 @@ router.post("/", async (request, response) => {
 });
 
 router.put("/:id", async (request, response) => {
-  const { error } = validateMovie(request.body);
+  const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
   const genre = await dbGenres.getGenre(request.body.genreId);
@@ -61,7 +62,7 @@ router.put("/:id", async (request, response) => {
 });
 
 router.delete("/:id", async (request, response) => {
-  const { error } = validateMovie(request.body);
+  const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
   const result = await dbMovies.removeMovie(request.params.id);
@@ -70,17 +71,5 @@ router.delete("/:id", async (request, response) => {
 
   response.send(JSON.stringify(result, null, " "));
 });
-
-function validateMovie(movie) {
-  const schema = {
-    title: Joi.string()
-      .min(5)
-      .required(),
-    numberInStock: Joi.number().default(0),
-    dailyRentalRent: Joi.number().default(0),
-    genreId: Joi.string().required()
-  };
-  return Joi.validate(movie, schema);
-}
 
 module.exports = router;

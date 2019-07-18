@@ -1,17 +1,7 @@
 const mongoose = require("mongoose");
+const modelMovie = require("../models/movie");
 
-const schemaGenre = new mongoose.Schema({
-  name: { type: String, required: true, maxlength: 255, minlength: 5 }
-});
-
-const schemaMovie = new mongoose.Schema({
-  title: { type: String, required: true, maxlength: 255, minlength: 5 },
-  numberInStock: { type: Number, default: 0 },
-  dailyRentalRent: { type: Number, default: 0 },
-  genre: { type: schemaGenre }
-});
-
-const Movie = mongoose.model("Movie", schemaMovie);
+const Movie = mongoose.model("Movie", modelMovie.schema);
 
 module.exports.getAllMovies = async function getAllMovies() {
   const movies = await Movie.find();
