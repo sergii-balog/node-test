@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
+const modelClient = require("../models/client");
 
-const schema = new mongoose.Schema({
-  name: { type: String, required: true, maxlength: 255, minlength: 5 },
-  phone: { type: String, required: true },
-  isGold: { type: Boolean, default: false }
-});
-
-const Client = mongoose.model("Client", schema);
+const Client = mongoose.model("Client", modelClient.schema);
 
 module.exports.getAllClients = async function getAllClients() {
   const clients = await Client.find();

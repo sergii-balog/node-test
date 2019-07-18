@@ -3,10 +3,9 @@ const Joi = require("joi");
 const router = express.Router();
 const dbMovies = require("../db/movies");
 const dbGenres = require("../db/genres");
-const modelMovie = require("../models/genre");
+const modelMovie = require("../models/movie");
 
 router.get("/", async (request, response) => {
-  console.log("inside");
   const result = await dbMovies.getAllMovies();
   response.send(JSON.stringify(result, null, " "));
 });

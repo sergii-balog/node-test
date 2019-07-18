@@ -2,6 +2,7 @@ const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
 const dbGenres = require("../db/clients");
+const modelClient = require("../models/client");
 
 router.get("/", async (request, response) => {
   const result = await dbGenres.getAllClients();
@@ -16,7 +17,7 @@ router.get("/:id", async (request, response) => {
 });
 
 router.post("/", async (request, response) => {
-  const { error } = validateGenre(request.body);
+  const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
   const result = await dbGenres.createClient(
@@ -28,7 +29,7 @@ router.post("/", async (request, response) => {
 });
 
 router.put("/:id", async (request, response) => {
-  const { error } = validateGenre(request.body);
+  const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
   const result = await dbGenres.updateClient(
     request.params.id,
@@ -43,7 +44,7 @@ router.put("/:id", async (request, response) => {
 });
 
 router.delete("/:id", async (request, response) => {
-  const { error } = validateGenre(request.body);
+  const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
   const result = await dbGenres.removeClient(request.params.id);
@@ -52,18 +53,5 @@ router.delete("/:id", async (request, response) => {
 
   response.send(JSON.stringify(result, null, " "));
 });
-
-function validateGenre(genre) {
-  const schema = {
-    name: Joi.string()
-      .min(5)
-      .required(),
-    phone: Joi.string()
-      .min(7)
-      .required(),
-    isGold: Joi.boolean().default(false)
-  };
-  return Joi.validate(genre, schema);
-}
 
 module.exports = router;

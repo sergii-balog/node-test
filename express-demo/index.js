@@ -12,6 +12,7 @@ const homeRoutes = require("./routes/home");
 const genresRoutes = require("./routes/genres");
 const clientRoutes = require("./routes/clients");
 const movieRoutes = require("./routes/movies");
+const rentalRoutes = require("./routes/rentals");
 
 mongoose
   .connect(config.get("mongo.connectionString"), config.get("mongo.options"))
@@ -40,6 +41,8 @@ app.use("/api/courses", coursesRoutes);
 app.use("/api/genres", genresRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/movies", movieRoutes);
+app.use("/api/rentals", rentalRoutes);
+
 app.use("/", homeRoutes);
 //Start application
 const port = process.env.PORT || 4546;
