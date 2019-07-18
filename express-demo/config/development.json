@@ -3,5 +3,12 @@
   "htmlContants": {
     "welcomeHtml": "Express development server",
     "pong": "Pong dev"
+  },
+  "mongo": {
+    "connectionString": "mongodb://localhost/application",
+    "options": {
+      "useNewUrlParser": true,
+      "useFindAndModify": false
+    }
   }
 }
