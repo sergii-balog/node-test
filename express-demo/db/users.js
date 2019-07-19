@@ -8,9 +8,10 @@ module.exports.getUser = async function getUser(email) {
   return user;
 };
 
-module.exports.createUser = async function createUser(user) {
+module.exports.createUser = async function createUser(user, token) {
   const userMongo = new User(user);
-  return await userMongo.save();
+  const result = await userMongo.save();
+  return result;
 };
 
 module.exports.removeUser = async function removeUser(id) {

@@ -10,5 +10,6 @@
       "useNewUrlParser": true,
       "useFindAndModify": false
     }
-  }
+  },
+  "jwtPrivateKey": ""
 }

@@ -16,6 +16,13 @@ const clientRoutes = require("./routes/clients");
 const movieRoutes = require("./routes/movies");
 const rentalRoutes = require("./routes/rentals");
 const userRoutes = require("./routes/users");
+const authRoutes = require("./routes/auth");
+
+// check required environment
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKey is not defined");
+  process.exit(1);
+}
 
 mongoose
   .connect(config.get("mongo.connectionString"), config.get("mongo.options"))
@@ -46,6 +53,7 @@ app.use("/api/clients", clientRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/rentals", rentalRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use("/", homeRoutes);
 //Start application
