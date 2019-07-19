@@ -27,8 +27,8 @@ module.exports.schema = new mongoose.Schema({
 
 module.exports.validate = function validateMovie(rental) {
   const schema = {
-    clientId: Joi.string().required(),
-    movieId: Joi.string().required()
+    clientId: Joi.objectId().required(),
+    movieId: Joi.objectId().required()
   };
   return Joi.validate(rental, schema);
 };

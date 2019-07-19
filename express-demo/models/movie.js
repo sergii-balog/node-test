@@ -16,7 +16,7 @@ module.exports.validate = function validateMovie(movie) {
       .required(),
     numberInStock: Joi.number().default(0),
     dailyRentalRent: Joi.number().default(0),
-    genreId: Joi.string().required()
+    genreId: Joi.objectId().required()
   };
   return Joi.validate(movie, schema);
 };

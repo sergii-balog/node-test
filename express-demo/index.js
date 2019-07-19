@@ -4,6 +4,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const config = require("config");
 const mongoose = require("mongoose");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 //[Environment]::SetEnvironmentVariable("DEBUG","app:startup") // export DEBUG=app:startup
 const startupDebugger = require("debug")("app:startup");
 //routes
@@ -13,6 +15,7 @@ const genresRoutes = require("./routes/genres");
 const clientRoutes = require("./routes/clients");
 const movieRoutes = require("./routes/movies");
 const rentalRoutes = require("./routes/rentals");
+const userRoutes = require("./routes/users");
 
 mongoose
   .connect(config.get("mongo.connectionString"), config.get("mongo.options"))
@@ -42,6 +45,7 @@ app.use("/api/genres", genresRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/rentals", rentalRoutes);
+app.use("/api/users", userRoutes);
 
 app.use("/", homeRoutes);
 //Start application
