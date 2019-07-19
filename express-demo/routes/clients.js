@@ -1,8 +1,8 @@
 const express = require("express");
-const Joi = require("joi");
 const router = express.Router();
 const dbGenres = require("../db/clients");
 const modelClient = require("../models/client");
+const authMiddleware = require("../middleware/auth");
 
 router.get("/", async (request, response) => {
   const result = await dbGenres.getAllClients();
@@ -16,7 +16,7 @@ router.get("/:id", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.post("/", async (request, response) => {
+router.post("/", authMiddleware, async (request, response) => {
   const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
@@ -28,7 +28,7 @@ router.post("/", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.put("/:id", async (request, response) => {
+router.put("/:id", authMiddleware, async (request, response) => {
   const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
   const result = await dbGenres.updateClient(
@@ -43,7 +43,7 @@ router.put("/:id", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.delete("/:id", async (request, response) => {
+router.delete("/:id", authMiddleware, async (request, response) => {
   const { error } = modelClient.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 

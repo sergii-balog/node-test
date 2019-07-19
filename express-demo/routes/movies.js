@@ -1,9 +1,9 @@
 const express = require("express");
-const Joi = require("joi");
 const router = express.Router();
 const dbMovies = require("../db/movies");
 const dbGenres = require("../db/genres");
 const modelMovie = require("../models/movie");
+const authMiddleware = require("../middleware/auth");
 
 router.get("/", async (request, response) => {
   const result = await dbMovies.getAllMovies();
@@ -17,7 +17,7 @@ router.get("/:id", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.post("/", async (request, response) => {
+router.post("/", authMiddleware, async (request, response) => {
   const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
@@ -36,7 +36,7 @@ router.post("/", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.put("/:id", async (request, response) => {
+router.put("/:id", authMiddleware, async (request, response) => {
   const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
@@ -60,7 +60,7 @@ router.put("/:id", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.delete("/:id", async (request, response) => {
+router.delete("/:id", authMiddleware, async (request, response) => {
   const { error } = modelMovie.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 

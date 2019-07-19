@@ -1,11 +1,10 @@
 const express = require("express");
-const Joi = require("joi");
 const router = express.Router();
 const dbRentals = require("../db/rentals");
 const dbMovies = require("../db/movies");
 const dbClients = require("../db/clients");
-
 const modelRental = require("../models/rental");
+const authMiddleware = require("../middleware/auth");
 
 router.get("/", async (request, response) => {
   const result = await dbRentals.getAllRentals();
@@ -19,7 +18,7 @@ router.get("/:id", async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.post("/", async (request, response) => {
+router.post("/", authMiddleware, async (request, response) => {
   const { error } = modelRental.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
@@ -74,7 +73,7 @@ router.post("/", async (request, response) => {
 //   response.send(JSON.stringify(result, null, " "));
 // });
 
-router.delete("/:id", async (request, response) => {
+router.delete("/:id", authMiddleware, async (request, response) => {
   const { error } = modelRental.validate(request.body);
   if (error) return response.status(400).send(error.details[0].message);
 
