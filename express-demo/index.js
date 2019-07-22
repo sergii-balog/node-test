@@ -1,4 +1,6 @@
-const headerMiddleware = require("./middleware/headerMiddleware");
+require("express-async-errors");
+const headerMiddleware = require("./middleware/header");
+const errorMiddleware = require("./middleware/error");
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -6,6 +8,8 @@ const config = require("config");
 const mongoose = require("mongoose");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const winston = require("winston");
+
 //[Environment]::SetEnvironmentVariable("DEBUG","app:startup") // export DEBUG=app:startup
 const startupDebugger = require("debug")("app:startup");
 //routes
@@ -54,8 +58,10 @@ app.use("/api/movies", movieRoutes);
 app.use("/api/rentals", rentalRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-
 app.use("/", homeRoutes);
+
+app.use(errorMiddleware);
+
 //Start application
 const port = process.env.PORT || 4546;
 app.listen(port, () => {

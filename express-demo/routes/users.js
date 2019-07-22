@@ -4,6 +4,12 @@ const express = require("express");
 const router = express.Router();
 const dbUser = require("../db/users");
 const modelUser = require("../models/user");
+const authMiddleware = require("../middleware/auth");
+
+router.get("/me", authMiddleware, async (request, response) => {
+  let user = await dbUser.getUserById(request.user._id);
+  response.send(user);
+});
 
 router.post("/", async (request, response) => {
   const { error } = modelUser.validate(request.body);

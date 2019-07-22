@@ -31,9 +31,14 @@ module.exports.schema = new mongoose.Schema({
     minlength: 5,
     unique: true
   },
-  password: { type: String, required: true, maxlength: 1024, minlength: 5 }
+  password: { type: String, required: true, maxlength: 1024, minlength: 5 },
+  isAdmin: { type: Boolean, default: false }
 });
 
 module.exports.generateAuthToken = function(user) {
-  return jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+  const issueDate = Date.now();
+  return jwt.sign(
+    { _id: user._id, isAdmin: user.isAdmin, issueDate: issueDate },
+    config.get("jwtPrivateKey")
+  );
 };

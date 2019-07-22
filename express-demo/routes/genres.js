@@ -3,6 +3,7 @@ const router = express.Router();
 const dbGenres = require("../db/genres");
 const modelGenre = require("../models/genre");
 const authMiddleware = require("../middleware/auth");
+const adminMiddleware = require("../middleware/admin");
 
 router.get("/", async (request, response) => {
   const result = await dbGenres.getAllGenres();
@@ -37,15 +38,20 @@ router.put("/:id", authMiddleware, async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.delete("/:id", authMiddleware, async (request, response) => {
-  const { error } = modelGenre.validate(request.body);
-  if (error) return response.status(400).send(error.details[0].message);
+router.delete(
+  "/:id",
+  [authMiddleware, adminMiddleware],
+  async (request, response) => {
+    throw new Error("Test");
+    const { error } = modelGenre.validate(request.body);
+    if (error) return response.status(400).send(error.details[0].message);
 
-  const result = await dbGenres.removeGenre(request.params.id);
-  if (!result)
-    return response.status(404).send("The genre with such Id does not exist");
+    const result = await dbGenres.removeGenre(request.params.id);
+    if (!result)
+      return response.status(404).send("The genre with such Id does not exist");
 
-  response.send(JSON.stringify(result, null, " "));
-});
+    response.send(JSON.stringify(result, null, " "));
+  }
+);
 
 module.exports = router;
