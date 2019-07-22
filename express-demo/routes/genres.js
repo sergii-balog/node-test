@@ -42,7 +42,6 @@ router.delete(
   "/:id",
   [authMiddleware, adminMiddleware],
   async (request, response) => {
-    throw new Error("Test");
     const { error } = modelGenre.validate(request.body);
     if (error) return response.status(400).send(error.details[0].message);
 
