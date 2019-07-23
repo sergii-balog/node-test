@@ -1,0 +1,10 @@
+{
+  "mongo": {
+    "connectionString": "mongodb://localhost/test-application",
+    "options": {
+      "useNewUrlParser": true,
+      "useFindAndModify": false
+    }
+  },
+  "jwtPrivateKey": "12345"
+}

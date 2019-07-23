@@ -12,6 +12,8 @@ require("./startup/validation")();
 
 //Start application
 const port = process.env.PORT || 4546;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   startupDebugger(`${config.get("name")} listening on port :${port} ....`);
 });
+
+module.exports.server = server;

@@ -5,8 +5,10 @@
     "pong": "Pong"
   },
   "mongo": {
-    "connectionString": "mongodb://localhost/application",
+    "connectionString": "mongodb://localhost/application?authSource=admin",
     "options": {
+      "user": "mongoadmin",
+      "pass": "!QAZ2wsx",
       "useNewUrlParser": true,
       "useFindAndModify": false
     }
