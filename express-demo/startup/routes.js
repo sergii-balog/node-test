@@ -8,6 +8,7 @@ const movieRoutes = require("../routes/movies");
 const rentalRoutes = require("../routes/rentals");
 const userRoutes = require("../routes/users");
 const authRoutes = require("../routes/auth");
+const cartRoutes = require("../routes/cart");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const headerMiddleware = require("../middleware/header");
@@ -35,6 +36,7 @@ module.exports = function(app, startupDebugger) {
   app.use("/api/rentals", rentalRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/auth", authRoutes);
+  app.use("/api/cart", cartRoutes);
   app.use("/", homeRoutes);
 
   app.use(errorMiddleware);
