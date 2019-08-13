@@ -38,7 +38,12 @@ module.exports.schema = new mongoose.Schema({
 module.exports.generateAuthToken = function(user) {
   const issueDate = Date.now();
   return jwt.sign(
-    { _id: user._id, isAdmin: user.isAdmin, issueDate: issueDate },
+    {
+      _id: user._id,
+      isAdmin: user.isAdmin,
+      issueDate: issueDate,
+      name: user.name
+    },
     config.get("jwtPrivateKey")
   );
 };
