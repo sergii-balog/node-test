@@ -25,6 +25,7 @@ router.post("/", async (request, response) => {
 
   response
     .header("X-Auth-Token", token)
+    .header("access-control-expose-headers", "X-Auth-Token")
     .send(JSON.stringify(_.pick(result, ["name", "email", "_id"]), null, " "));
 });
 
