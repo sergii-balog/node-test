@@ -4,6 +4,7 @@ const dbMovies = require("../db/movies");
 const dbGenres = require("../db/genres");
 const modelMovie = require("../models/movie");
 const authMiddleware = require("../middleware/auth");
+const adminMiddleware = require("../middleware/admin");
 
 router.get("/", async (request, response) => {
   const result = await dbMovies.getAllMovies();
@@ -60,15 +61,19 @@ router.put("/:id", authMiddleware, async (request, response) => {
   response.send(JSON.stringify(result, null, " "));
 });
 
-router.delete("/:id", authMiddleware, async (request, response) => {
-  const { error } = modelMovie.validate(request.body);
-  if (error) return response.status(400).send(error.details[0].message);
+router.delete(
+  "/:id",
+  [authMiddleware, adminMiddleware],
+  async (request, response) => {
+    const { error } = modelMovie.validate(request.body);
+    if (error) return response.status(400).send(error.details[0].message);
 
-  const result = await dbMovies.removeMovie(request.params.id);
-  if (!result)
-    return response.status(404).send("The movie with such Id does not exist");
+    const result = await dbMovies.removeMovie(request.params.id);
+    if (!result)
+      return response.status(404).send("The movie with such Id does not exist");
 
-  response.send(JSON.stringify(result, null, " "));
-});
+    response.send(JSON.stringify(result, null, " "));
+  }
+);
 
 module.exports = router;
